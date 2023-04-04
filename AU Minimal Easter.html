@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office" style="
+color-scheme: light dark; supported-color-schemes: light dark; --text-color-1: #767690; --text-color-2: #4E5777; --text-color-3: rgba(62, 62, 62, 0.9); --unchanged-main: #767690;
+  --dm-display: none; --lm-hide: inline; margin: 0 auto; padding: 0; margin-top: 0; margin-bottom: 0; margin-right: auto; margin-left: auto; padding-top: 0; padding-bottom: 0; padding-right: 0; padding-left: 0;
+   height: 100%; width: 100%;background: #FFF; background-color:#FFFFFF;" dir="ltr">
+<!--README: 
+    1) ctrl+F and search '[input your data here]'
+    2) data-constructor="constructor-table-top","constructor-table-middle","data-type="constructor-table-footer" and class 'constructor-body' are necessary for normal work system.
+
+    Tags:
+    1) For every text(p,span,a etc) is necessary to add:
+        1.1) data-type="editable-text",
+        1.2) data-length="65" (65 is count of possible characters).
+    2) for every image (img) is necessary to add data-type="editable-image".
+    3) If you use tables with 2-3 comlumns you need to use:
+        3.1) data-type="editable-table" to tag <table>
+        3.2) data-column-count="3" (3 is column count min 2, max 3) and width="100%"(100% is yours max width) to tag <table>.
+        3.3) data-type="column" width="33%" (33% your width) to tag. <td>
+
+    Examples:
+    1) <p data-type="editable-text" data-length="65" class="..." style="..."> Some text </p>,
+    2) <img data-type="editable-image" style="..." src="...">
+    3) <table data-type="editable-table" data-column-count="3" width="100%">
+        <tbody>
+            <tr>
+                <td data-type="column" width="33%">1</td>
+                <td data-type="column" width="33%">2</td>
+                <td data-type="column" width="33%">3</td>
+            </tr>
+        </tbody>
+    </table>
+    -->
+
+<head>
+    <meta charset="utf-8">
+    <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width">
+    <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">
+    <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <!-- Tell iOS not to automatically link certain text strings. -->
+
+    <title>tsars-Friday-Reload-1</title>
+
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+
+    <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+    <style  >
+        * {
+            font-family: 'Montserrat', Arial, sans-serif !important !important;
+        }
+    </style>
+<![endif]-->
+
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]><!-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Tillana:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!--<![endif]-->
+
+    <!-- Web Font / @font-face : END -->
+
+    <style type="text/css">
+        /* What it does: Remove spaces around the email design added by some email clients. */
+        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+
+        td {
+            padding: 0;
+        }
+
+        html,
+        body {
+            margin: 0 auto !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+        /* What it does: Stops email clients resizing small text. */
+
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            font-family: 'Montserrat', 'Inter', 'Calibri', Arial, sans-serif;
+            font-size: inherit;
+        }
+
+        /* What it does: Centers email on Android 4.4 */
+
+        div[style*="margin: 16px 0"] {
+            margin: 0 !important;
+        }
+
+        /* What it does: forces Samsung Android mail clients to use the entire viewport */
+
+        #MessageViewBody,
+        #MessageWebViewDiv {
+            width: 100% !important;
+        }
+
+        /* What it does: Stops Outlook from adding extra spacing to tables. */
+
+        table,
+        td,
+        tr {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+
+        tr {
+            padding: 0 !important;
+        }
+
+        /* What it does: Fixes webkit padding issue. */
+
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+        }
+
+        /* What it does: Uses a better rendering method when resizing images in IE. */
+
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
+
+        a {
+            text-decoration: none;
+        }
+
+        /* What it does: A work-around for email clients meddling in triggered links. */
+
+        a[x-apple-data-detectors],
+        /* iOS */
+
+        .unstyle-auto-detected-links a,
+        .aBn {
+            border-bottom: 0 !important;
+            cursor: default !important;
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+
+        /* What it does: Prevents Gmail from changing the text color in conversation threads. */
+
+        .im {
+            color: inherit !important;
+        }
+
+        /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
+
+        .a6S {
+            display: none !important;
+            opacity: 0.01 !important;
+        }
+
+        /* If the above doesn't work, add a .g-img class to any image in question. */
+
+        img.g-img+div {
+            display: none !important;
+        }
+
+        /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+        /* Create one of these media queries for each additional viewport size you'd like to fix */
+        /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+            u~div .email-container {
+                min-width: 320px !important;
+            }
+
+            html,
+            body {
+                font-size: 13px;
+            }
+        }
+
+        @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+            u~div .email-container {
+                min-width: 375px !important;
+            }
+
+            html,
+            body {
+                font-size: 14px;
+            }
+
+            .spacer {
+                height: 470px !important;
+            }
+        }
+
+        @media only screen and (min-device-width: 414px) {
+            u~div .email-container {
+                min-width: 414px !important;
+            }
+
+            html,
+            body {
+                font-size: 15px;
+            }
+        }
+
+        @media only screen and (min-width: 650px) {
+            .center-container {
+                margin: 0px 0 0px 0;
+            }
+
+            .email-container {
+                border-radius: 10px;
+            }
+
+            html,
+            body {
+                font-size: 20px;
+            }
+
+            .spacer {
+                height: 488px !important;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+
+            .stack-column-center {
+                text-align: center !important;
+            }
+
+            .center-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+
+            table.center-on-narrow {
+                display: inline-block !important;
+            }
+        }
+    </style>
+
+    <!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
+    <!--[if gte mso 9]>
+<xml  >
+    <o:OfficeDocumentSettings  >
+        <o:AllowPNG  />
+        <o:PixelsPerInch  >96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+</head>
+<!--
+The email background color (#f1f1f1) is defined in three places:
+1. body tag: for most email clients
+2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
+3. mso conditional: For Windows 10 Mail
+-->
+
+<body width="100%" class="dm-bg"
+    style="background: #FFF; background-color:#FFFFFF; margin: 0 auto; padding: 0; height: 100%; width: 100%;">
+    <center class="center-container dm-bg" style="width: 100%;">
+        <!--[if mso | IE]>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"  class="center-container"  >
+    <tr  >
+    <td style="mso-table-lspace:0pt !important;mso-table-rspace:0pt !important;" >
+    <![endif]-->
+
+        <!--
+        Set the email width. Defined in two places:
+        1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 605px.
+        2. MSO tags for Desktop Windows Outlook enforce a 605px width.
+        Note: The Fluid and Responsive templates have a different width (600px). The hybrid grid is more "fragile", and I've found that 605px is a good width. Change with caution.
+    -->
+        <table data-constructor="constructor-table-header" role="presentation" border="0" cellpadding="0"
+            cellspacing="0" width="634"
+            style="padding-bottom: 20px;height:95px; padding-top: 0; padding-bottom: 0; padding-right: 25px; padding-left: 25px; text-align: center;  border-spacing: 0; border-collapse: collapse; table-layout: fixed;"
+            align="center" height="95">
+            <tbody align="center">
+                <tr>
+                    <td height="95" valign="bottom">
+                        <img data-type="editable-image" style="  
+                object-fit: contain;
+                height: 55px;
+                padding-bottom: 10px;" src="https://tsarscdn.s3.eu-north-1.amazonaws.com/emails/t-logo-big.png">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--[if mso]>
+    <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="605" height="1430">
+    <tr>
+    <td>
+    <![endif]-->
+        <table data-constructor="constructor-table-top" width="634" valign="top" align="center">
+            <tbody align="center">
+                <tr>
+                    <td>
+                        <table width="606"
+                            style="background: linear-gradient(180deg, rgba(205,0,255,0) 0% , #F8FCFF 2% , #F8FCFF 98% , rgba(205,0,255,0) 100% );border-radius: 30px; border-spacing: 0;">
+                            <tbody>
+                                <tr class="title-subtitle-1">
+                                    <td height="620" align="center" valign="top" data-type="editable-background"
+                                        style="padding: 0;background: url(https://tsarscdn.s3.eu-north-1.amazonaws.com/emails/redesign+1/top+bg/header-Easter2023.png) no-repeat center;border-radius: 30px 30px 0px 0px ;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <div data-type="editable-text-container">
+                                            <p data-length="999" data-type="editable-text"
+                                                style="font-size: 28px;line-height: 32px;font-weight: 700;color: #0F0928;max-width: 550px;margin-top: 30px;">
+                                                Claim your Easter Bonus!
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="10">
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="546" align="center">
+                                            <tr>
+                                                <td align="center">
+                                                    <div data-type="editable-text-container">
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #767690;">
+                                                            It might not be an egg made of gold, but this bonus is bound
+                                                            to
+                                                            get you feeling eggstatic! Get your
+                                                        </span>
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #50ADFE;">
+                                                            deposit bonus free spins
+                                                        </span>
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #767690;">
+                                                            on
+                                                        </span>
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #50ADFE;">
+                                                            a top game
+                                                        </span>
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #767690;">
+                                                            to celebrate Easter the </span>
+
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #50ADFE;">
+                                                            Tsars
+                                                        </span>
+                                                        <span data-length="999" data-type="editable-text"
+                                                            style="font-size: 18px;font-weight: 500;line-height: 24px;color: #767690;">
+                                                            way.</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="40">
+
+                                    </td>
+                                </tr>
+                                <tr class="btn-center-1">
+                                    <td height="300" valign="top" align="center" data-type="editable-background"
+                                        style="background: url(https://tsarscdn.s3.eu-north-1.amazonaws.com/emails/redesign+1/footer+bg/footer-Easter2023.png) no-repeat bottom center;">
+                                        <table>
+                                            <tr>
+                                                <td class="button-td button-td-primary">
+                                                    <div data-type="editable-text-container"> <a data-length="100"
+                                                            data-type="editable-text" data-style="editable-style"
+                                                            href="[redirector]" target="_blank"
+                                                            class="button-a button-a-primary "
+                                                            style="background: #5D92F5;background: linear-gradient(to right, #5D92F5, #965CF5);padding-top: 2px; border: 0px; border-radius: 40px; font-size: 18px; font-weight: 700; line-height: 62px; text-decoration: none; color: #FFFFFF; display: block; min-width: 178px; width: 328px; text-align: center;"
+                                                            id="69d5414e-2f90-4700-94a1-150f01816b33">Claim your
+                                                            fortune</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="spacer-634px-1">
+                    <td height="1" align="left" valign="bottom"><img data-style="editable-style"
+                            src="https://tsarscdn.s3.eu-north-1.amazonaws.com/emails/spacer-634.png" width="634"
+                            height="1" style="width: 634px; height: 1px;">
+                    </td>
+                </tr>
+
+            </tbody>
+            <!--[if mso]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </table>
+        <!--[if mso | IE]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+        <!--[if mso | IE]>
+    <table role="presentation " border="0 " cellpadding="0 " cellspacing="0 " width="605 "  class="center-container "  >
+    <tr  >
+    <td style="mso-table-lspace:0pt !important;mso-table-rspace:0pt !important; " >
+    <![endif]-->
+        <table data-constructor="constructor-table-footer" role="presentation " border="0 " cellpadding="0 "
+            cellspacing="0 " width="634" style="width: 634px;" align="center">
+            <tbody align="center">
+                <tr>
+                    <td align="center">
+                        <p data-length="999" data-type="editable-text"
+                            style="font-size: 16px;font-weight: 500;text-align: center;margin: 0;display: inline;color: #A4A4BB; ">
+                            If you'd no longer like to receive these emails, you can
+                        </p>
+                        <a data-length="999" data-type="editable-text"
+                            style="display: inline; text-decoration:underline;font-size: 16px;font-weight:500;text-align: center;margin: 0;color: #4E5777;"
+                            href="[unsubscribe_link]">
+                            unsubscribe
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top:10px;" align="center">
+                        <p data-type="editable-text" data-length="999"
+                            style="margin: 0; font-size: 14px; line-height: 24px;color: #A4A4BB; font-weight: 500; width:546px ">
+                            [footer]</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--[if mso | IE]>
+</td>
+</tr>
+</table>
+<![endif]-->
+    </center>
+
+
+</body>
+
+</html>
